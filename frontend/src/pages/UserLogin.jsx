@@ -1,21 +1,61 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState , useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import {UserDataContext} from '../context/UserContext'
+
+
 
 
 
 const UserLogin = () => {
-    const [Email, setEmail] = useState('');
-    const [Password, setPassword] = useState('');
-    const [UserData, setUserData] = useState({})
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [userData, setUserData] = useState({});
+    const { user , setUser } = useContext(UserDataContext) ;
 
-    const submitHandler = (e)=>{
+      const navigate = useNavigate();
+
+    const submitHandler = async (e)=> {
         e.preventDefault();
-        setUserData({
-            email: Email,
-            password: Password
-        })
-        setEmail('');
-        setPassword('');
+
+
+        const userData = {
+            email: email,
+        password: password,
+        };
+
+        // console.log("Sending Data:", userData);
+
+        try {
+            const baseURL = import.meta.env.VITE_BASE_URL;
+            const response = await axios.post(`${baseURL}/user/login`, userData);
+    
+            console.log("Data Submitted Successfully");
+            
+            console.log(response.status)// ✅ Log response data
+    
+            if (response.status === 200) {
+                const data = response.data
+                setUser(data.user);
+                localStorage.setItem('token', data.token)
+                navigate('/home');
+            } 
+
+            setUserData(
+                {
+                    Email:email,
+                    Password:password,
+                }
+            )
+
+            
+
+            setEmail('');
+            setPassword('');
+    
+        } catch (error) {
+            console.error("Error:", error.response?.data || error.message);
+        }
     }
 
 
@@ -30,7 +70,7 @@ const UserLogin = () => {
                         className='bg-gray-200 mb-7 rounded px-4 py-2 w-full border text-lg placeholder:text-base'
                         type="email"
                         placeholder='email@example.com'
-                        value={Email}
+                        value={email}
                         onChange={(e)=>{
                             setEmail(e.target.value)
                         }}
@@ -41,7 +81,7 @@ const UserLogin = () => {
                         className='bg-gray-200 mb-7 rounded px-4 py-2 w-full border text-lg placeholder:text-base'
                         type="password"
                         placeholder='Password'
-                        value={Password}
+                        value={password}
                         onChange={(e)=>{
                             setPassword(e.target.value)
                         }}

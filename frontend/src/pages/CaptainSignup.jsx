@@ -1,28 +1,48 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { CaptainDataContext } from '../context/CaptainContext';
 
 const CaptainSignup = () => {
-  const [Firstname, setFirstname] = useState('');
-  const [Lastname, setLastname] = useState('');
-  const [Email, setEmail] = useState('');
-  const [Password, setPassword] = useState('');
-  const [UserData, setUserData] = useState({})
+  const [firstname, setFirstname] = useState('');
+  const [lastname, setLastname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [userData, setUserData] = useState("");
+
+  const [vehicleColor, setVehicleColor] = useState("");
+  const [vehiclePlate, setVehiclePlate] = useState("");
+  const [vehicleCapacity, setVehicleCapacity] = useState("");
+  const [vehicleType, setVehicleType] = useState("");
+
+
+  const navigate = useNavigate();
+
+
+  const {captain, setCaptain } = React.useContext(CaptainDataContext);
+   const captainContext = useContext(CaptainDataContext);
+    if (!userContext) {
+      throw new Error("UserSignup must be used within a UserContextProvider");
+    }
 
   const submitHandler = (e) => {
     e.preventDefault();
-    setUserData({
+    const newCaptain = {
       fullname:{
-        firstname: Firstname,
-        lastname: Lastname
+        firstname: firstname,
+        lastname: lastname
       },          
-      email: Email,
-      password: Password,
+      email: email,
+      password: password,
 
-    })
+    }
     setFirstname('');
     setLastname('');
     setEmail('');
     setPassword('');
+    setVehicleCapacity('');
+    setVehicleColor('');
+    setVehiclePlate('');
+    setVehicleType('selectVehicleType')
   }
 
 
@@ -39,7 +59,7 @@ const CaptainSignup = () => {
               className='bg-gray-200   rounded px-4 py-2 w-1/2 border text-lg placeholder:text-base'
               type="text"
               placeholder='Firstname'
-              value={Firstname}
+              value={firstname}
               onChange={(e) => {
                 setFirstname(e.target.value)
               }}
@@ -48,7 +68,7 @@ const CaptainSignup = () => {
               className='bg-gray-200  rounded  px-4 py-2 w-1/2 border text-lg placeholder:text-base'
               type="text"
               placeholder='Lastname'
-              value={Lastname}
+              value={lastname}
               onChange={(e) => {
                 setLastname(e.target.value)
               }}
@@ -60,7 +80,7 @@ const CaptainSignup = () => {
             className='bg-gray-200 mb-5 rounded px-4 py-2 w-full border text-lg placeholder:text-base'
             type="email"
             placeholder='email@example.com'
-            value={Email}
+            value={email}
             onChange={(e) => {
               setEmail(e.target.value)
             }}
@@ -71,11 +91,65 @@ const CaptainSignup = () => {
             className='bg-gray-200 mb-5 rounded px-4 py-2 w-full border text-lg placeholder:text-base'
             type="password"
             placeholder='Password'
-            value={Password}
+            value={password}
             onChange={(e) => {
               setPassword(e.target.value)
             }}
           />
+            <h3 className='text-xl font-medium mb-2'>Enter Vehicle Details</h3>
+
+            <div className='flex gap-4'>
+            <input
+            required
+            className='bg-gray-200 mb-5 rounded px-4 py-2 w-1/2 border text-lg placeholder:text-base'
+            type="text"
+            placeholder='Vehicle Color'
+            value={vehicleColor}
+            onChange={(e) => {
+              setVehicleColor(e.target.value)
+            }}
+          />
+          <input
+            required
+            className='bg-gray-200 mb-5 rounded px-4 py-2 w-1/2 border text-lg placeholder:text-base'
+            type="text"
+            placeholder='Vehicle Plate'
+            value={vehiclePlate}
+            onChange={(e) => {
+              setVehiclePlate(e.target.value)
+            }}
+          />
+          </div>
+
+          <div className='flex gap-4'>
+          <input
+            required
+            className='bg-gray-200 mb-5 rounded px-4 py-2 w-1/2 border text-lg placeholder:text-base'
+            type="text"
+            placeholder='Vehicle Capacity'
+            value={vehicleCapacity}
+            onChange={(e) => {
+              setVehicleCapacity(e.target.value)
+            }}
+          />
+          <select
+            required
+            className='bg-gray-200 mb-5 rounded px-4 py-2 w-1/2 border text-lg placeholder:text-base'
+            type="password"
+            value={vehicleType}
+            onChange={(e) => {
+              setVehicleType(e.target.value)
+            }}
+          >
+            <option value="selectVehicleType">Select Vehicle Type</option>
+            <option value="car">Car</option>
+            <option value="bike">Bike</option>
+            <option value="auto">Auto</option>
+            <option value="bus">Bus</option>
+          </select>
+          </div>
+          
+          
           <button className='bg-black text-white font-semibold mb-3 rounded px-4 py-2 w-full text-lg placeholder:text-base'>Sign Up</button>
 
         </form>

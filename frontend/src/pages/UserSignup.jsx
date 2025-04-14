@@ -15,48 +15,9 @@ const UserSignup = () => {
 
   const navigate = useNavigate();
 
-  const userContext = useContext(UserDataContext);
-  if (!userContext) {
-    throw new Error("UserSignup must be used within a UserContextProvider");
-  }
+  
   const { User, setUser } = userContext;
   
-
-  // const submitHandler = async (e) => {
-  //   e.preventDefault();
-  //   const newUser = {
-  //     fullname:{
-  //       firstname: firstname,
-  //       lastname: lastname,
-  //     },
-  //     email: email,
-  //     password: password,
-
-  //   }
-
-
-
-  //   const baseURL = import.meta.env.VITE_BASE_URL;
-    
-  //   const response = await axios.post(`${baseURL}/user/register`, newUser);
-
-  //   if(response.status === 201) {
-
-  //     console.log('1')
-  //     const user = response.data
-
-  //     setUser(user.user)
-
-  //     navigate('/home')
-  //   }
-
-
-  //   setFirstname('');
-  //   setLastname('');
-  //   setEmail('');
-  //   setPassword('');
-  // }
-
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -69,17 +30,18 @@ const UserSignup = () => {
         password: password,
     };
 
-    console.log("Sending Data:", newUser);  // ✅ Log request data
+    // console.log("Sending Data:", newUser);  // ✅ Log request data
 
     try {
         const baseURL = import.meta.env.VITE_BASE_URL;
         const response = await axios.post(`${baseURL}/user/register`, newUser);
 
-        console.log("Response Data:", response.data);  // ✅ Log response data
+        console.log("Data Submitted Successfully");  // ✅ Log response data
 
         if (response.status === 201) {
             setUser(response.data.user);
-            navigate('/home');
+            localStorage.setItem('token', data.token);
+            navigate('/login');
         }
 
         setFirstname('');
